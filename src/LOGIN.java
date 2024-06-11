@@ -92,7 +92,7 @@ public class LOGIN extends JFrame {
                 String inputpassword = password.getText();
 
                 if (username.equals("waris") && inputpassword.equals("gt")) {
-                    new InventoryManager();
+                    new HOME();
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid username or password");
                 }

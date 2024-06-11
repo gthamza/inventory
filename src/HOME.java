@@ -3,11 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class InventoryManager extends JFrame {
+public class HOME extends JFrame {
 
-    public InventoryManager() {
+    public HOME() {
         // Frame settings
-        setTitle("Inventory Manager");
+        setTitle("HOME");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
@@ -18,7 +18,7 @@ public class InventoryManager extends JFrame {
         sidebarPanel.setLayout(new GridLayout(10, 1, 0, 10));
         sidebarPanel.setPreferredSize(new Dimension(200, getHeight()));
 
-        String[] menuItems = {"Home", "Products", "Customers", "Sales", "Purchase", "Users"};
+        String[] menuItems = {"HOME", "Products", "Customers", " Currect Sales", "history"};
         for (String item : menuItems) {
             JButton button = new JButton(item);
             button.setForeground(Color.LIGHT_GRAY);
@@ -28,15 +28,27 @@ public class InventoryManager extends JFrame {
             button.setBorderPainted(false);
             sidebarPanel.add(button);
 
-
-            if(item.equals("Products")){
-           button.addActionListener(new ActionListener() {
-               @Override
-               public void actionPerformed(ActionEvent e) {
-                   new product();
-               }
-           });
-            }
+            // Add action listeners for each button
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    switch (item) {
+                        case "Products":
+                            new product(); // Assuming you have a class named 'product'
+                            break;
+                        case "Customers":
+                            new Customers(); // Assuming you have a class named 'customer'
+                            break;
+                        case "HOME":
+                            new HOME();
+                            break;
+                        // Add cases for other menu items as needed
+                        default:
+                            JOptionPane.showMessageDialog(null, "Clicked: " + item);
+                            break;
+                    }
+                }
+            });
         }
 
         // Logout button
@@ -57,18 +69,18 @@ public class InventoryManager extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.BLACK);
 
-        JLabel welcomeLabel = new JLabel("Welcome,  Admin.(HAMZA)");
+        JLabel welcomeLabel = new JLabel("Welcome, Admin.(HAMZA)");
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 30));
         welcomeLabel.setForeground(Color.LIGHT_GRAY);
         headerPanel.add(welcomeLabel, BorderLayout.CENTER);
 
-        JLabel userLabel = new JLabel("User:  Admin (HAMZA)");
+        JLabel userLabel = new JLabel("User: Admin (HAMZA)");
         userLabel.setFont(new Font("Serif", Font.PLAIN, 15));
         userLabel.setForeground(Color.LIGHT_GRAY);
         headerPanel.add(userLabel, BorderLayout.EAST);
 
         // Info label
-        JLabel infoLabel = new JLabel("<html>Manage your inventory, transactions and personnel, all in one place.<br>Click on the Menu button to start.</html>");
+        JLabel infoLabel = new JLabel("<html>Manage your inventory, transactions, and personnel, all in one place.<br>Click on the Menu button to start.</html>");
         infoLabel.setFont(new Font("Serif", Font.PLAIN, 18));
         infoLabel.setForeground(Color.LIGHT_GRAY);
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -93,13 +105,11 @@ public class InventoryManager extends JFrame {
                 );
 
                 if (response == JOptionPane.YES_OPTION) {
-                    // Logic for logout (e.g., close current window, show login window)
                     dispose();
                     new LOGIN(); // Assuming you have a LoginPage class for login
                 }
             }
         });
-
 
         // Frame settings
         setSize(800, 600);
@@ -108,6 +118,6 @@ public class InventoryManager extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(InventoryManager::new);
+        SwingUtilities.invokeLater(HOME::new);
     }
 }

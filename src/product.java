@@ -7,6 +7,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class product extends JFrame {
 
@@ -24,7 +26,7 @@ public class product extends JFrame {
         sidepanal.setBackground(Color.DARK_GRAY);
         sidepanal.setLayout(new GridLayout(10, 1, 0, 10));
         sidepanal.setPreferredSize(new Dimension(200, getHeight()));
-        String[] menu = {"Home", "Products", "Customers", "Sales", "Purchase", "Users"};
+        String[] menu = {"HOME", "Products", "Customers", " Currect Sales", "History"};
 
         for (String item : menu) {
             JButton button = new JButton(item);
@@ -34,6 +36,32 @@ public class product extends JFrame {
             button.setHorizontalAlignment(SwingConstants.LEFT);
             button.setBorderPainted(false);
             sidepanal.add(button);
+
+            // Add action listeners for each button
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    switch (item) {
+                        case "Products":
+                            new product(); // Assuming you have a class named 'product'
+                            dispose();
+                            break;
+                        case "Customers":
+                            new Customers(); // Assuming you have a class named 'customer'
+                            dispose();
+                            break;
+                        case "HOME":
+                            new HOME();
+                            break;
+                        case "History":
+                            new SalesHistory();
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Clicked: " + item);
+                            break;
+                    }
+                }
+            });
         }
 
         // Logout button
@@ -57,21 +85,20 @@ public class product extends JFrame {
                 );
 
                 if (response == JOptionPane.YES_OPTION) {
-                    // Logic for logout (e.g., close current window, show login window)
                     dispose();
-                    new LOGIN(); // Assuming you have a LoginPage class for login
+                    new LOGIN();
                 }
             }
         });
 
         // Main panel
         JPanel main = new JPanel(new BorderLayout());
-        main.setBackground(Color.BLACK);  // Set main panel background to black
+        main.setBackground(Color.BLACK);
 
         // Header panel
         JPanel header = new JPanel();
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
-        header.setBackground(Color.BLACK);  // Set header panel background to black
+        header.setBackground(Color.BLACK);
 
         // Panel for welcome and product labels
         JPanel labelPanel = new JPanel(new BorderLayout());
@@ -107,7 +134,7 @@ public class product extends JFrame {
         searchbutton.setForeground(Color.white);
         productSearchPanel.add(searchbutton);
 
-        //action listner for seaarch button
+        //action listener for search button
         searchbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,6 +161,43 @@ public class product extends JFrame {
         addButton.setFocusPainted(false);
         addButton.setBorderPainted(false);
 
+        JButton backButton = new JButton("REFRESH");
+        backButton.setFont(new Font("Serif", Font.BOLD, 20));
+        backButton.setForeground(Color.LIGHT_GRAY);
+        backButton.setBackground(Color.DARK_GRAY);
+        backButton.setFocusPainted(false);
+        backButton.setBorderPainted(false);
+
+        JLabel dateLabel = new JLabel("Date:");
+        dateLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        dateLabel.setForeground(Color.LIGHT_GRAY);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date currentDate = new Date();
+        JTextField dateField = new JTextField(formatter.format(currentDate));
+        dateField.setPreferredSize(new Dimension(120, 25)); // Adjust width as needed
+        dateField.setFont(new Font("Serif", Font.PLAIN, 15));
+        dateField.setBackground(Color.BLACK);
+        dateField.setForeground(Color.WHITE);
+        dateField.setEditable(false);
+
+        dateField.setHorizontalAlignment(JTextField.CENTER);
+
+        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        datePanel.setBackground(Color.BLACK);
+        datePanel.add(dateLabel);
+        datePanel.add(dateField);
+        addButtonPanel.add(datePanel, BorderLayout.CENTER);
+
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new product();
+                dispose();
+            }
+        });
+
         // POP UP FOR AT ADD BUTTON
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -145,10 +209,6 @@ public class product extends JFrame {
                 popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 popup.getContentPane().setBackground(Color.BLACK);
 
-                // Popup components
-                JLabel procodelabel = new JLabel("PROCODE");
-                JTextField procodefield = new JTextField();
-
                 JLabel pronamelabel = new JLabel("PRONAME");
                 JTextField pronamefield = new JTextField();
 
@@ -159,14 +219,6 @@ public class product extends JFrame {
                 JTextField sellpricefield = new JTextField();
 
                 JButton save = new JButton("SAVE");
-
-                // Setting styles for the popup
-                procodelabel.setForeground(Color.LIGHT_GRAY);
-                procodelabel.setFont(new Font("Serif", Font.BOLD, 15));
-                procodefield.setBackground(Color.BLACK);
-                procodefield.setForeground(Color.WHITE);
-                procodefield.setFont(new Font("Serif", Font.PLAIN, 15));
-
                 pronamelabel.setForeground(Color.LIGHT_GRAY);
                 pronamelabel.setFont(new Font("Serif", Font.BOLD, 15));
                 pronamefield.setBackground(Color.BLACK);
@@ -191,8 +243,6 @@ public class product extends JFrame {
                 save.setFocusPainted(false);
                 save.setBorderPainted(false);
 
-                popup.add(procodelabel);
-                popup.add(procodefield);
                 popup.add(pronamelabel);
                 popup.add(pronamefield);
                 popup.add(costpricelabel);
@@ -202,16 +252,17 @@ public class product extends JFrame {
                 popup.add(new JLabel());
                 popup.add(save);
 
-                // Action listener for the save button
                 save.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String productCode = procodefield.getText();
                         String productName = pronamefield.getText();
-                        double costPrice = Double.parseDouble(costpricefield.getText());
-                        double sellPrice = Double.parseDouble(sellpricefield.getText());
+                        int costPrice = Integer.parseInt(costpricefield.getText());
+                        int sellPrice = Integer.parseInt(sellpricefield.getText());
 
-                        tableModel.addRow(new Object[]{productCode, productName, costPrice, sellPrice});
+                        insertStatement(productName, costPrice, sellPrice);
+                        tableModel.setRowCount(0);
+                        loadData();
+
                         popup.dispose();
                     }
                 });
@@ -220,14 +271,14 @@ public class product extends JFrame {
                 popup.setVisible(true);
             }
         });
-
+        addButtonPanel.add(backButton, BorderLayout.WEST);
         addButtonPanel.add(addButton, BorderLayout.EAST);
         header.add(labelPanel);
         header.add(addButtonPanel);
 
         main.add(header, BorderLayout.NORTH);
 
-        // Table setup
+
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
         tableModel.addColumn("PROCODE");
@@ -235,7 +286,6 @@ public class product extends JFrame {
         tableModel.addColumn("COSTPRICE");
         tableModel.addColumn("SELLPRICE");
 
-        // Set table and header background and foreground colors
         table.setBackground(Color.BLACK);
         table.setForeground(Color.WHITE);
         table.setGridColor(Color.GRAY);
@@ -245,7 +295,7 @@ public class product extends JFrame {
         tableHeader.setForeground(Color.WHITE);
         tableHeader.setFont(new Font("Serif", Font.BOLD, 20));
 
-        // Custom cell renderer to set background and foreground colors for table cells
+
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setBackground(Color.BLACK);
         cellRenderer.setForeground(Color.WHITE);
@@ -254,11 +304,11 @@ public class product extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         main.add(scrollPane, BorderLayout.CENTER);
 
-        // Add panels to the frame
+
         add(sidepanal, BorderLayout.WEST);
         add(main, BorderLayout.CENTER);
 
-        // Load data from the database
+
         loadData();
 
         setLocationRelativeTo(null);
@@ -268,21 +318,41 @@ public class product extends JFrame {
     private void loadData() {
         String url = "jdbc:mysql://localhost:3306/inventory"; // Change as per your DB config
         String user = "root"; // DB user
-        String password = "password"; // DB password
+        String password = "password123"; // DB password
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            String query = "SELECT * FROM products";
+            String query = "SELECT `products`.`product_id`,\n" +
+                    "   `products`.`product_name`,\n" +
+                    "    `products`.`product_cost`,\n" +
+                    "    `products`.`product_sell_price`\n" +
+                    "FROM `inventory`.`products`;\n";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                String productCode = resultSet.getString("productcode");
-                String productName = resultSet.getString("productname");
-                double costPrice = resultSet.getDouble("costprice");
-                double sellPrice = resultSet.getDouble("sellprice");
+                String productCode = resultSet.getString("product_id");
+                String productName = resultSet.getString("product_name");
+                double costPrice = resultSet.getDouble("product_cost");
+                double sellPrice = resultSet.getDouble("product_sell_price");
 
                 tableModel.addRow(new Object[]{productCode, productName, costPrice, sellPrice});
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertStatement(String name, int costPrice, int sellPrice) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/inventory", "root", "password123");
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO `inventory`.`products` ( `product_name`, `product_cost`, `product_sell_price`) \n VALUES ( ? , ? , ?)");
+
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, costPrice);
+            preparedStatement.setInt(3, sellPrice);
+
+            preparedStatement.executeUpdate();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
