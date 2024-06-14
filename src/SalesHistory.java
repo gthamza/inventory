@@ -95,7 +95,6 @@ public class SalesHistory extends JFrame {
         });
 
 
-
         // Main panel
         JPanel main = new JPanel(new BorderLayout());
         main.setBackground(Color.BLACK);
