@@ -106,14 +106,14 @@ public class HOME extends JFrame {
 
                 if (response == JOptionPane.YES_OPTION) {
                     dispose();
-                    new LOGIN(); // Assuming you have a LoginPage class for login
+                    new HOME();
                 }
             }
         });
 
         // Frame settings
         setSize(800, 600);
-        setLocationRelativeTo(null); // Center the frame
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

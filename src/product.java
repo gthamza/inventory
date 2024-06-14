@@ -86,7 +86,7 @@ public class product extends JFrame {
 
                 if (response == JOptionPane.YES_OPTION) {
                     dispose();
-                    new LOGIN();
+                    new HOME();
                 }
             }
         });

@@ -42,6 +42,7 @@ public class LOGIN extends JFrame {
 
         // login heading
         LOGIN.setFont(new Font("serif", Font.BOLD, 35));
+        LOGIN.setBackground(Color.black);
         LOGIN.setForeground(Color.LIGHT_GRAY);
 
         // user text label
@@ -99,9 +100,9 @@ public class LOGIN extends JFrame {
             }
         });
 
-        // frame
-        pack(); // Pack components tightly
-        setLocationRelativeTo(null); // Center the frame
+
+        pack();
+        setLocationRelativeTo(null);
         setSize(855, 380);
         setVisible(true);
     }

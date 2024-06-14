@@ -24,7 +24,7 @@ public class SalesHistory extends JFrame {
         setSize(800, 600);
         setLayout(new BorderLayout());
 
-        // Create and configure the side panel
+        // Side panel
         JPanel sidePanel = new JPanel();
         sidePanel.setBackground(Color.DARK_GRAY);
         sidePanel.setLayout(new GridLayout(10, 1, 0, 10));
@@ -50,7 +50,7 @@ public class SalesHistory extends JFrame {
                             dispose();
                             break;
                         case "Customers":
-                            new Customers();
+                            new Customers(); // Assuming you have a class named 'customer'
                             dispose();
                             break;
                         case "HOME":
@@ -60,9 +60,6 @@ public class SalesHistory extends JFrame {
                             new currentsales();
                             dispose();
                             break;
-                        case "History":
-                            new SalesHistory();
-                            break;
                         default:
                             JOptionPane.showMessageDialog(null, "Clicked: " + item);
                             break;
@@ -71,7 +68,6 @@ public class SalesHistory extends JFrame {
             });
         }
 
-        // Logout button
         JButton logoutButton = new JButton("Sign out");
         logoutButton.setForeground(Color.ORANGE);
         logoutButton.setBackground(Color.DARK_GRAY);
@@ -80,7 +76,7 @@ public class SalesHistory extends JFrame {
         logoutButton.setBorderPainted(false);
         sidePanel.add(logoutButton);
 
-        // Register the logout action listener here, outside of the addButton action listener
+
         logoutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int response = JOptionPane.showConfirmDialog(
@@ -98,7 +94,9 @@ public class SalesHistory extends JFrame {
             }
         });
 
-        // Create and configure the main panel
+
+
+        // Main panel
         JPanel main = new JPanel(new BorderLayout());
         main.setBackground(Color.BLACK);
 
@@ -118,8 +116,7 @@ public class SalesHistory extends JFrame {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         JTextField dateField = new JTextField(formatter.format(new Date()));
-        dateField.setPreferredSize(new Dimension(120, 25));
-
+        dateField.setPreferredSize(new Dimension(120, 25)); // Adjust width as needed
         dateField.setFont(new Font("Serif", Font.PLAIN, 15));
         dateField.setBackground(Color.BLACK);
         dateField.setForeground(Color.WHITE);
@@ -199,10 +196,9 @@ public class SalesHistory extends JFrame {
 
         loadData();
 
-        // Add mouse listener to table for double-click events
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 1) {
                     int row = table.getSelectedRow();
                     String selectedDate = tableModel.getValueAt(row, 0).toString();
                     loadDetailData(selectedDate);
@@ -221,7 +217,7 @@ public class SalesHistory extends JFrame {
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "SELECT DATE(`timestamp`) AS sale_date, SUM(`product_sell_price`) AS total_sell_price " +
-                    "FROM `currectsales` " +
+                    "FROM `inventory`.`currectsales` " +
                     "GROUP BY sale_date";
 
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -241,14 +237,13 @@ public class SalesHistory extends JFrame {
     }
 
     private void loadDetailData(String selectedDate) {
-        System.out.println("Selected Date: " + selectedDate);
-        String url = "jdbc:mysql://localhost:3306/inventory";
+        String url = "jdbc:mysql://localhost:3306/inventory"; // Change as per your DB config
         String user = "root";
         String password = "password123";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            String query = "SELECT `idcurrectsales`, `product_name`, `product_cost_price`, `product_sell_price` " +
-                    "FROM `currectsales` " +
+            String query = "SELECT `idcurrectsales`, `product_name`, `product_cost`, `product_sell_price` " +
+                    "FROM `inventory`.`currectsales` " +
                     "WHERE DATE(`timestamp`) = ?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -256,17 +251,16 @@ public class SalesHistory extends JFrame {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Clear previous data from detailTableModel
-            detailTableModel.setRowCount(0);
+            detailTableModel.setRowCount(0); // Clear previous data
 
             while (resultSet.next()) {
-                String productId = resultSet.getString("idcurrectsales");
+                String productCode = resultSet.getString("idcurrectsales");
                 String productName = resultSet.getString("product_name");
-                double costPrice = resultSet.getDouble("product_cost_price");
+                double costPrice = resultSet.getDouble("product_cost");
                 double sellPrice = resultSet.getDouble("product_sell_price");
 
                 // Add the row to the detailTableModel
-                detailTableModel.addRow(new Object[]{productId, productName, costPrice, sellPrice});
+                detailTableModel.addRow(new Object[]{productCode, productName, costPrice, sellPrice});
             }
 
         } catch (SQLException e) {
