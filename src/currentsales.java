@@ -44,11 +44,11 @@ public class currentsales extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     switch (item) {
                         case "Products":
-                            new product(); // Assuming you have a class named 'product'
+                            new product(); 
                             dispose();
                             break;
                         case "Customers":
-                            new Customers(); // Assuming you have a class named 'Customers'
+                            new Customers();
                             dispose();
                             break;
                         case "HOME":
@@ -314,9 +314,9 @@ public class currentsales extends JFrame {
     }
 
     private void loadData() {
-        String url = "jdbc:mysql://localhost:3306/inventory"; // Change as per your DB config
-        String user = "root"; // DB user
-        String password = "password123"; // DB password
+        String url = "jdbc:mysql://localhost:3306/inventory";
+        String user = "root";
+        String password = "password123";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -334,7 +334,7 @@ public class currentsales extends JFrame {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            double totalSellPrice = 0.0; // Variable to store the total sell price
+            double totalSellPrice = 0.0; 
 
             while (resultSet.next()) {
                 String productCode = resultSet.getString("idcurrectsales");
