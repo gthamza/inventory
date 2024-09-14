@@ -46,11 +46,11 @@ public class SalesHistory extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     switch (item) {
                         case "Products":
-                            new product(); // Assuming you have a class named 'product'
+                            new product();
                             dispose();
                             break;
                         case "Customers":
-                            new Customers(); // Assuming you have a class named 'customer'
+                            new Customers();
                             dispose();
                             break;
                         case "HOME":
